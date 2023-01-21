@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <h1>{% block title %} Players {% endblock %}</h1>
+    <div style="width: 50%; margin: auto">
+        {% for player in players %}
+        <div style="padding: 10px; background-color: #EEE; margin: 20px">
+            <p style="font-size: 24px">{{ player }}</p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
