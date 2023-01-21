@@ -1,13 +1,31 @@
-{% extends 'index.html' %}
+{% extends 'roles.html' %}
 
-{% block content %}
-    <h1>{% block title %} Players {% endblock %}</h1>
-    <div style="width: 50%; margin: auto">
-        {% for player in players %}
-        <div style="padding: 10px; background-color: #EEE; margin: 20px">
-            <p style="font-size: 24px">{{ player }}</p>
-        </div>
-        {% endfor %}
-    </div>
+
+{% block child %}
+  <table id="data" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Team Name</th>
+        <th>Value</th>
+        <th>Total Points</th>
+        <th>Goals scored</th>
+        <th>Assists</th>
+        <th>Clean Sheets</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in players %}
+        <tr>
+          <td>{{ user[0] }}</td>
+          <td>{{ user[1] }}</td>
+          <td>{{ user[2] }}</td>
+          <td>{{ user[3] }}</td>
+          <td>{{ user[4] }}</td>
+          <td>{{ user[5] }}</td>
+          <td>{{ user[6] }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
-

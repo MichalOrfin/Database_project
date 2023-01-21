@@ -5,20 +5,34 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # from main import db
 
 class User(UserMixin):
-  id = ''
-#   id = db.Column(db.Integer, primary_key=True)
-#   username = db.Column(db.String(50), index=True, unique=True)
-#   email = db.Column(db.String(150), unique = True, index = True)
-#   password_hash = db.Column(db.String(150))
-#   joined_at = db.Column(db.DateTime(), default = datetime.utcnow, index = True)
-    # access = db.Column(db.Integer) 0-user, 1-dev, 2-admin
-    #available_money
+    def __init__(self, login, email):
+         self.login = login
+         self.email = email
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+    def check_password(self,password):
+      return check_password_hash(self.password,password)
+    def is_active(self):
+         return self.is_active()
+    def is_anonymous(self):
+         return False
+    def is_authenticated(self):
+         return self.authenticated
+    def is_active(self):
+         return True
+    def get_id(self):
+         return self.id
 
-  def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+# class User(UserMixin):
+#   id = ''
+# #   id = db.Column(db.Integer, primary_key=True)
+# #   username = db.Column(db.String(50), index=True, unique=True)
+# #   email = db.Column(db.String(150), unique = True, index = True)
+# #   password_hash = db.Column(db.String(150))
+# #   joined_at = db.Column(db.DateTime(), default = datetime.utcnow, index = True)
+#     # access = db.Column(db.Integer) 0-user, 1-dev, 2-admin
+#     #available_money
 
-  def check_password(self,password):
-      return check_password_hash(self.password_hash,password)
 
 class Player():
     id = ''

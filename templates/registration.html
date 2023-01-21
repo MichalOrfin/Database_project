@@ -31,7 +31,7 @@
    </div>
    <br>
    <div>
-      {{ form.password1(placeholder="password",
+      {{ form.password(placeholder="password",
       style='width: 50%;
       font-weight: bold;
       padding: 12px 20px ;
@@ -39,21 +39,7 @@
       border: 1px solid #ccc;
       border-radius: 4px;
       box-sizing: border-box') }}
-      {% for error in form.password1.errors %}
-      <p>{{ error }}</p>
-      {% endfor %}
-   </div>
-   <br>
-   <div>
-      {{ form.password2(placeholder="Confirm password",
-      style='width: 50%;
-      font-weight: bold;
-      padding: 12px 20px ;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box') }}
-      {% for error in form.password2.errors %}
+      {% for error in form.password.errors %}
       <p>{{ error }}</p>
       {% endfor %}
    </div>

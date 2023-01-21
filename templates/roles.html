@@ -1,0 +1,20 @@
+{% extends 'index.html' %}
+
+
+{% block content %}
+
+<body>
+    <nav>
+        <a href="{{ url_for('players_list', pos ='FWD') }}">Forwards</a>
+        <a href="{{ url_for('players_list', pos = 'MID') }}">Midfielders</a>
+        <a href="{{ url_for('players_list', pos = 'DEF') }}">Defenders</a>
+        <a href="{{ url_for('players_list', pos = 'GK') }}">Goalkeepers</a>
+
+    </nav>
+    <hr>
+    <div class="child">
+        {% block child %} {% endblock %}
+    </div>
+</body>
+
+{% endblock %}

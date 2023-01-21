@@ -1,5 +1,5 @@
 from flask import Flask, redirect, url_for, render_template
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 import os
 from flask_login import LoginManager
 from flask_wtf import FlaskForm
@@ -9,6 +9,7 @@ from forms import RegistrationForm, LoginForm
 from models import User, Player
 # import templates
 from templates import *
+import sqlite3
 
 app = Flask(__name__)
 
@@ -19,10 +20,17 @@ app = Flask(__name__)
 SECRET_KEY = os.urandom(32)
 app.config['SECRET_KEY'] = SECRET_KEY
 
+connection = sqlite3.connect('fpl_v2.db', check_same_thread=False)
+cursor = connection.cursor()
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
 @app.route("/")
+def logres():
+    return render_template('logres.html')
+
+@app.route("/index")
 def index():
     return render_template('index.html')
 
@@ -33,12 +41,11 @@ def load_user(user_id):
 @app.route('/register', methods = ['POST','GET'])
 def register():
     form = RegistrationForm()
-    # if form.validate_on_submit():
-    #     user = User(username =form.username.data, email = form.email.data)
-    #     user.set_password(form.password1.data)
-    #     db.session.add(user)
-    #     db.session.commit()
-    #     return redirect(url_for('login'))
+    if form.validate_on_submit():
+        user = User(login =form.username.data, email = form.email.data)
+        user.set_password(form.password.data)
+        cursor.execute(f'insert into users values (1,"{user.login}", "{user.email}", "{user.password}")')
+        return redirect(url_for('login'))
     return render_template('registration.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -53,11 +60,26 @@ def login():
         # flash('Invalid email address or Password.')    
     return render_template('login.html', form=form)
 
-@app.route('/players', methods=['GET'])
-def players_list():
+@app.route('/players/<string:pos>', methods=['GET'])
+def players_list(pos):
+    print('DUPA')
+    print(pos)
     # players = [Player.load(db, uid) for uid in db]
-    players = ['Dupa', 'Twoja stara']
+    cursor.execute( F"""select gw1.name, gw1.team, gw1.value, gw2.total_points, gw2.goals_scored, gw2.assists, gw2.clean_sheets FROM
+ (select distinct name, team, round(value*0.1, 1) as value from merged_gw where gw=20 and position = "{pos}") gw1
+ JOIN
+ (select name, sum(total_points) as total_points, sum(goals_scored) as goals_scored,
+sum(assists) as assists, sum(clean_sheets) as clean_sheets
+from merged_gw where GW is not NULL group by name) gw2
+on gw1.name=gw2.name
+order by gw2.total_points desc, gw1.value desc""")
+    players = cursor.fetchall()
+    print(players)
     return render_template('players_list.html', players=players)
+
+@app.route('/roles', methods=['GET'])
+def roles():
+    return render_template('roles.html')
 
 #show team
 #create user
