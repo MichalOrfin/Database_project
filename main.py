@@ -48,17 +48,33 @@ def register():
         return redirect(url_for('login'))
     return render_template('registration.html', form=form)
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route("/login", methods=['GET','POST'])
 def login():
-    form = LoginForm()
-    # if form.validate_on_submit():
-        # user = User.query.filter_by(email = form.email.data).first()
-        # if user is not None and user.check_password(form.password.data):
-        #     login_user(user)
-        #     next = request.args.get("next")
-        #     return redirect(next or url_for('home'))
-        # flash('Invalid email address or Password.')    
-    return render_template('login.html', form=form)
+  form = LoginForm()
+  if form.validate_on_submit():
+     cursor.execute("SELECT id, email FROM users where email = (?)",    [form.email.data])
+     user = list(curs.fetchone())
+     Us = load_user(user[0])
+     if form.email.data == Us.email and form.password.data == Us.password:
+        login_user(Us, remember=form.remember.data)
+        Umail = list({form.email.data})[0].split('@')[0]
+        flash('Logged in successfully '+Umail)
+        redirect(url_for('profile'))
+     else:
+        flash('Login Unsuccessfull.')
+  return render_template('login.html',title='Login', form=form)
+
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     form = LoginForm()
+#     # if form.validate_on_submit():
+#         # user = User.query.filter_by(email = form.email.data).first()
+#         # if user is not None and user.check_password(form.password.data):
+#         #     login_user(user)
+#         #     next = request.args.get("next")
+#         #     return redirect(next or url_for('home'))
+#         # flash('Invalid email address or Password.')    
+#     return render_template('login.html', form=form)
 
 @app.route('/players/<string:pos>', methods=['GET'])
 def players_list(pos):
