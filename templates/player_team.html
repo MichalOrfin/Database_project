@@ -1,7 +1,8 @@
-{% extends 'roles.html' %}
+{% extends 'index.html' %}
 
 
-{% block child %}
+{% block content %}
+<p>{{message}}</p>
   <table id="data" class="table table-striped">
     <thead>
       <tr>
@@ -24,8 +25,8 @@
           <td>{{ user[4] }}</td>
           <td>{{ user[5] }}</td>
           <td>{{ user[6] }}</td>
-          <td><form method="post" action="/add_player">
-            <button input_type ="submit" aria-setsize="4" aria-posinset="1" value="{{user[0]}}" name="NAME" > Add player</button>
+          <td><form method="post" action="/remove_player">
+            <button input_type ="submit" aria-setsize="4" aria-posinset="1" value="{{user[0]}}" name="NAME" > Remove player</button>
           </form></td>
         </tr>
       {% endfor %}

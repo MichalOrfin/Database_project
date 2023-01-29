@@ -5,13 +5,17 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # from main import db
 
 class User(UserMixin):
-    def __init__(self, login, email):
+    def __init__(self, id, login, email):
+         self.id = id
          self.login = login
          self.email = email
+         self.team_value = 0
     def set_password(self, password):
         self.password = generate_password_hash(password)
-    def check_password(self,password):
-      return check_password_hash(self.password,password)
+    def check_password(self, password, cursor):
+        cursor.execute('select password from users where id = (?)', [self.id])
+        hashed_password = cursor.fetchone()[0]
+        return check_password_hash(hashed_password,password)
     def is_active(self):
          return self.is_active()
     def is_anonymous(self):
